@@ -12,6 +12,7 @@ dist
 dist-react
 dist-electron
 *.local
+.tanstack
 
 # Editor directories and files
 .vscode/*
