@@ -1,3 +1,5 @@
 const electron = require('electron')
-
-electron.contextBridge.exposeInMainWorld()
+console.log('preload')
+electron.contextBridge.exposeInMainWorld('electron', {
+    getDonors: () => electron.ipcRenderer.invoke('get-donors')
+})

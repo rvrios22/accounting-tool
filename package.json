@@ -11,6 +11,7 @@
     "dev:electron": "npm run transpile:electron && cross-env NODE_ENV=development electron .",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "seed-db": "node src/electron/utils/seed.cjs",
     "transpile:electron": "tsc --project src/electron/tsconfig.json",
     "dist:mac-silicon": "npm run transpile:electron && npm run build && electron-builder --mac --arm64",
     "dist:mac-intel": "npm run transpile:electron && npm run build && electron-builder --mac --x64",
@@ -21,7 +22,8 @@
     "@tanstack/react-router": "^1.121.27",
     "@tanstack/react-router-devtools": "^1.121.27",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
