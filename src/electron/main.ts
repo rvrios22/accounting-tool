@@ -5,6 +5,7 @@ import { getPreloadPath } from './utils/pathResolver.js'
 import os from 'os';
 import { getDb, closeDb } from './db/db.js';
 import { initializeDonorHandlers } from './ipcHandlers/donorHandlers.js';
+import { initializeDonationHandlers } from './ipcHandlers/donationHandlers.js';
 
 if (os.platform() === 'darwin' && os.arch() === 'x64') {
   app.disableHardwareAcceleration();
@@ -14,6 +15,7 @@ app.on('ready', async () => {
   try {
     await getDb()
     await initializeDonorHandlers()
+    await initializeDonationHandlers()
     const mainWindow = new BrowserWindow({
       webPreferences: {
         preload: getPreloadPath()

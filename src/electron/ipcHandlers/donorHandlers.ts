@@ -4,7 +4,7 @@ import { DonorRepository } from '../repositories/DonorRepository.js'
 
 let donorRepository: DonorRepository
 export const initializeDonorHandlers = async () => {
-    console.log('handler initilized')
+    console.log('Donor handlers initilized')
     const db = await getDb()
     donorRepository = new DonorRepository(db)
     ipcMain.handle('get-donors', async () => {

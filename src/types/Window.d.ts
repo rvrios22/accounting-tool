@@ -1,8 +1,13 @@
+import { Donation } from "./Donation"
 import { Donor } from "./Donor"
 
 declare global {
     interface Window {
-        electron: {
+        donation: {
+            getDonations: () => Promise<Donation[]>
+            getDonationsTotal: () => Promise<number>
+        },
+        donor: {
             getDonors: () => Promise<Donor[]>
         }
     }
