@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Donation } from "../../types/Donation";
 import DonationRow from "../components/DonationRow/DonationRow";
+import AddDonationForm from "../components/AddDonationForm/AddDonationForm";
 
 export const Route = createFileRoute("/transactions")({
   component: RouteComponent,
@@ -45,6 +46,7 @@ function RouteComponent() {
           </tbody>
         </table>
       )}
+      <AddDonationForm />
     </>
   );
 }

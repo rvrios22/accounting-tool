@@ -6,6 +6,7 @@ declare global {
         donation: {
             getDonations: () => Promise<Donation[]>
             getDonationsTotal: () => Promise<number>
+            addDonation: (donation: Donation) => Promise<Donation>
         },
         donor: {
             getDonors: () => Promise<Donor[]>
