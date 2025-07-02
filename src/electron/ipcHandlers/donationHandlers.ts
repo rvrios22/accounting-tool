@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import { getDb } from "../db/db.js";
 import { DonationRepository } from '../repositories/DonationRepository.js'
+import { Donation } from "../../types/Donation.js";
 
 let donationRepository: DonationRepository
 export const initializeDonationHandlers = async () => {
@@ -22,6 +23,15 @@ export const initializeDonationHandlers = async () => {
             return total
         } catch (err: any) {
             console.error('Failed to get donations total via IPC: ', err.message)
+            throw new Error(err.message)
+        }
+    })
+    ipcMain.handle('add-donation', async (_, donation: Donation) => {
+        try {
+            const result = await donationRepository.addDonation(donation)
+            return result
+        } catch (err: any) {
+            console.error("Failed to add donation via IPC", err.message)
             throw new Error(err.message)
         }
     })

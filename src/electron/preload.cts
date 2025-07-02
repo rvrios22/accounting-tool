@@ -1,9 +1,12 @@
+import { Donation } from "../types/Donation"
+
 const electron = require('electron')
 
 // Donation Bridge
 electron.contextBridge.exposeInMainWorld('donation', {
     getDonations: () => electron.ipcRenderer.invoke('get-donations'),
-    getDonationsTotal: () => electron.ipcRenderer.invoke('get-donations-total')
+    getDonationsTotal: () => electron.ipcRenderer.invoke('get-donations-total'),
+    addDonation: (donation: Donation) => electron.ipcRenderer.invoke('add-donation', donation)
 })
 
 // Donor Bridge
