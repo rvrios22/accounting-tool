@@ -33,30 +33,15 @@ export class DonationRepository {
 
     addDonation({ date, amount, memo, method, DonorId }: Donation): Promise<Donation> {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO donations (date, amount, memo, method, DonorId) VALUES (?, ?, ?, ?, ?)`;
-            this.db.run(sql, [date, amount, memo, method, DonorId], function (err) {
+            this.db.run('insert into donations (date, amount, memo, method, DonorId) values (?, ?, ?, ?, ?)', [date, amount, memo, method, DonorId], (err) => {
                 if (err) {
-                    console.error('Error adding donation', err.message);
-                    reject(err);
+                    console.error('Err inserting donation into db', err.message)
+                    reject(err)
                 } else {
-                    // Fetch the newly inserted donation
-                    const insertedId = this.lastID;
-                    // 'this' here refers to the statement, not the class
-                    // So we need to use a function, not an arrow function
-                    // Now fetch the row
-                    (this as any).db.get(
-                        'SELECT * FROM donations WHERE id = ?',
-                        [insertedId],
-                        (err2: any, row: Donation) => {
-                            if (err2) {
-                                reject(err2);
-                            } else {
-                                resolve(row as Donation);
-                            }
-                        }
-                    );
+                    console.log('Donation inserted', { date, amount, memo, method, DonorId })
+                    resolve({date, amount, memo, method, DonorId})
                 }
-            });
-        });
+            })
+        })
     }
 }

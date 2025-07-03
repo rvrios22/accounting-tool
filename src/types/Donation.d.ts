@@ -1,8 +1,8 @@
 export interface Donation {
   id?: number;
   date: string;
-  amount: number;
+  amount: string;
   memo?: string;
-  method: string; 
-  DonorId: number;
+  method: 'Cash' | 'Check' | 'Online'; 
+  DonorId: number | undefined;
 }

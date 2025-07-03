@@ -27,13 +27,12 @@ export const initializeDonationHandlers = async () => {
         }
     })
     ipcMain.handle('add-donation', async (_, donation: Donation) => {
-        console.log(donation)
-        // try {
-        //     const result = await donationRepository.addDonation(donation)
-        //     return result
-        // } catch (err: any) {
-        //     console.error("Failed to add donation via IPC", err.message)
-        //     throw new Error(err.message)
-        // }
+        try {
+            const result = await donationRepository.addDonation(donation)
+            return result
+        } catch (err: any) {
+            console.error("Failed to add donation via IPC", err.message)
+            throw new Error(err.message)
+        }
     })
 }

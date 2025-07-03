@@ -4,11 +4,11 @@ import { Donation } from "../../../types/Donation";
 
 function AddDonationForm() {
   const [donors, setDonors] = useState<Donor[]>([]);
-  const [donation, setDonation] = useState({
-    date: "",
-    amount: "",
-    method: "",
-    donorId: "",
+  const [donation, setDonation] = useState<Donation>({
+    date: "07/03/2025",
+    amount: "200.00",
+    method: "Cash",
+    DonorId: 1,
   });
 
   useEffect(() => {
@@ -21,20 +21,21 @@ function AddDonationForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newDonation = {
+    const newDonation: Donation = {
       date: donation.date,
-      amount: parseFloat(donation.amount),
-      method: donation.method,
-      DonorId: parseInt(donation.donorId, 10),
+      amount: donation.amount,
+      method: donation.method as "Cash" | "Check" | "Online",
+      DonorId: donation.DonorId,
     };
     try {
-      await window.donation.addDonation(newDonation);
-      setDonation({ date: "", amount: "", method: "", donorId: "" });
+      const result = await window.donation.addDonation(newDonation);
+      console.log(result);
+      setDonation({ date: "", amount: "", method: "Cash", DonorId: undefined });
     } catch (err) {
       console.error("Failed to add donation", err);
     }
   };
-  
+
   return (
     <>
       <h2>Add Donation:</h2>
@@ -45,9 +46,7 @@ function AddDonationForm() {
           name="date"
           id="date"
           value={donation.date}
-          onChange={(e) =>
-            setDonation({ ...donation, date: e.target.value })
-          }
+          onChange={(e) => setDonation({ ...donation, date: e.target.value })}
         />
         <label htmlFor="amount">Amount:</label>
         <input
@@ -55,22 +54,18 @@ function AddDonationForm() {
           name="amount"
           id="amount"
           value={donation.amount}
-          onChange={(e) =>
-            setDonation({ ...donation, amount: e.target.value })
-          }
+          onChange={(e) => setDonation({ ...donation, amount: e.target.value })}
         />
         <label htmlFor="method">Method:</label>
         <select
           name="method"
           id="method"
           value={donation.method}
-          onChange={(e) =>
-            setDonation({ ...donation, method: e.target.value })
-          }
+          onChange={(e) => setDonation({ ...donation, method: e.target.value as "Cash" | "Check" | "Online" })}
         >
-          <option value="cash">Cash</option>
-          <option value="check">Check</option>
-          <option value="online">Online</option>
+          <option value="Cash">Cash</option>
+          <option value="Check">Check</option>
+          <option value="Online">Online</option>
         </select>
         <label htmlFor="donor">Donor:</label>
         <input
@@ -78,9 +73,11 @@ function AddDonationForm() {
           name="donor"
           id="donor"
           list="donors"
-          value={donation.donorId}
+          value={donation.DonorId}
           onChange={(e) =>
-            setDonation({ ...donation, donorId: e.target.value })
+            //TODO allow for user to type in donor name an then associate it with donorid
+            //@ts-ignore
+            setDonation({ ...donation, DonorId: e.target.value })
           }
         />
         <datalist id="donors">
