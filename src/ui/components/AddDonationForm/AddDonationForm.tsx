@@ -10,15 +10,17 @@ function AddDonationForm() {
     method: "",
     donorId: "",
   });
+
   useEffect(() => {
     const getDonors = async () => {
       setDonors(await window.donor.getDonors());
     };
     getDonors();
   }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Prepare the donation object
+
     const newDonation = {
       date: donation.date,
       amount: parseFloat(donation.amount),
@@ -27,14 +29,12 @@ function AddDonationForm() {
     };
     try {
       await window.donation.addDonation(newDonation);
-      // Optionally, reset the form
       setDonation({ date: "", amount: "", method: "", donorId: "" });
-      // Optionally, show a success message or trigger a refresh
     } catch (err) {
-      // Optionally, handle error
       console.error("Failed to add donation", err);
     }
   };
+  
   return (
     <>
       <h2>Add Donation:</h2>
