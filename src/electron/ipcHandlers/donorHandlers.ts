@@ -16,4 +16,14 @@ export const initializeDonorHandlers = async () => {
             throw new Error(err.message)
         }
     })
+    ipcMain.handle('get-donor-id-by-name', async (_, donorName: string) => {
+        try {
+
+            const donorId = await donorRepository.getDonorIdByName(donorName)
+            return donorId
+        } catch (err: any) {
+            console.error('Failed to get donor id via IPC: ', err.message)
+            throw new Error(err.message)
+        }
+    })
 }

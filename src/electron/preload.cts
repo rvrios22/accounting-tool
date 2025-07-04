@@ -1,4 +1,5 @@
 import { Donation } from "../types/Donation"
+import { Donor } from "../types/Donor"
 
 const electron = require('electron')
 
@@ -12,4 +13,5 @@ electron.contextBridge.exposeInMainWorld('donation', {
 // Donor Bridge
 electron.contextBridge.exposeInMainWorld('donor', {
     getDonors: () => electron.ipcRenderer.invoke('get-donors'),
+    getDonorIdByName: (donorName: string) => electron.ipcRenderer.invoke('get-donor-id-by-name', donorName)
 })

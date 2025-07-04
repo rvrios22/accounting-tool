@@ -4,5 +4,5 @@ export interface Donation {
   amount: string;
   memo?: string;
   method: 'Cash' | 'Check' | 'Online'; 
-  DonorId: number | undefined;
+  DonorId: number;
 }

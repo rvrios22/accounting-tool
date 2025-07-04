@@ -17,4 +17,17 @@ export class DonorRepository {
             })
         })
     }
+    getDonorIdByName(donorName: string): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.db.get('select * from donors where name = ?', [donorName], (err, row) => {
+                if (err) {
+                    console.log('Err finding donor by name', err.message)
+                    reject(err)
+                } else {
+                    console.log('Donor found')
+                    resolve((row as { id: number }).id)
+                }
+            })
+        })
+    }
 }

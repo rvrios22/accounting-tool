@@ -4,11 +4,11 @@ import { Donation } from "../../../types/Donation";
 
 function AddDonationForm() {
   const [donors, setDonors] = useState<Donor[]>([]);
-  const [donation, setDonation] = useState<Donation>({
+  const [donation, setDonation] = useState({
     date: "07/03/2025",
     amount: "200.00",
     method: "Cash",
-    DonorId: 1,
+    donor: "",
   });
 
   useEffect(() => {
@@ -21,16 +21,16 @@ function AddDonationForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    try {
     const newDonation: Donation = {
       date: donation.date,
       amount: donation.amount,
       method: donation.method as "Cash" | "Check" | "Online",
-      DonorId: donation.DonorId,
+      DonorId: await window.donor.getDonorIdByName(donation.donor)
     };
-    try {
       const result = await window.donation.addDonation(newDonation);
       console.log(result);
-      setDonation({ date: "", amount: "", method: "Cash", DonorId: undefined });
+      setDonation({ date: "", amount: "", method: "Cash", donor: "" });
     } catch (err) {
       console.error("Failed to add donation", err);
     }
@@ -61,7 +61,12 @@ function AddDonationForm() {
           name="method"
           id="method"
           value={donation.method}
-          onChange={(e) => setDonation({ ...donation, method: e.target.value as "Cash" | "Check" | "Online" })}
+          onChange={(e) =>
+            setDonation({
+              ...donation,
+              method: e.target.value as "Cash" | "Check" | "Online",
+            })
+          }
         >
           <option value="Cash">Cash</option>
           <option value="Check">Check</option>
@@ -73,16 +78,16 @@ function AddDonationForm() {
           name="donor"
           id="donor"
           list="donors"
-          value={donation.DonorId}
+          value={donation.donor}
           onChange={(e) =>
             //TODO allow for user to type in donor name an then associate it with donorid
             //@ts-ignore
-            setDonation({ ...donation, DonorId: e.target.value })
+            setDonation({ ...donation, donor: e.target.value })
           }
         />
         <datalist id="donors">
           {donors.map(({ id, name }) => (
-            <option key={id} value={id}>
+            <option key={id} value={name}>
               {name}
             </option>
           ))}
