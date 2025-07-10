@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import { getDb } from "../db/db.js";
 import { DonorRepository } from '../repositories/DonorRepository.js'
+import { Donor } from "../../types/Donor.js";
 
 let donorRepository: DonorRepository
 export const initializeDonorHandlers = async () => {
@@ -23,6 +24,15 @@ export const initializeDonorHandlers = async () => {
             return donorId
         } catch (err: any) {
             console.error('Failed to get donor id via IPC: ', err.message)
+            throw new Error(err.message)
+        }
+    })
+    ipcMain.handle('add-donor', async (_, donor) => {
+        try {
+            const donorObj = await donorRepository.addDonor(donor)
+            return donorObj
+        } catch (err: any) {
+            console.error('Failed to add donor via IPC: ', err.message)
             throw new Error(err.message)
         }
     })

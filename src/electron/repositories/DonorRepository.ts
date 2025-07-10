@@ -23,9 +23,25 @@ export class DonorRepository {
                 if (err) {
                     console.log('Err finding donor by name', err.message)
                     reject(err)
-                } else {
+                } else if (!row) {
+                    reject(new Error('Donor not found'))
+                }
+                else {
                     console.log('Donor found')
                     resolve((row as { id: number }).id)
+                }
+            })
+        })
+    }
+    addDonor({ name, address, email, phone, notes }: Donor): Promise<Donor> {
+        return new Promise((resolve, reject) => {
+            this.db.run('insert into donors (name, address, email, phone, notes) values (?, ?, ?, ?, ?)', [name, address, email, phone, notes], function (err) {
+                if (err) {
+                    console.error('Err inserting donor into db', err.message)
+                    reject(err)
+                } else {
+                    console.log('Donor added')
+                    resolve({ id: this.lastID, name, address, email, phone, notes })
                 }
             })
         })

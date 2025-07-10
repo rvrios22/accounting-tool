@@ -13,5 +13,6 @@ electron.contextBridge.exposeInMainWorld('donation', {
 // Donor Bridge
 electron.contextBridge.exposeInMainWorld('donor', {
     getDonors: () => electron.ipcRenderer.invoke('get-donors'),
-    getDonorIdByName: (donorName: string) => electron.ipcRenderer.invoke('get-donor-id-by-name', donorName)
+    getDonorIdByName: (donorName: string) => electron.ipcRenderer.invoke('get-donor-id-by-name', donorName),
+    addDonor: (donor: object) => electron.ipcRenderer.invoke('add-donor', donor)
 })

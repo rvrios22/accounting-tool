@@ -10,7 +10,8 @@ declare global {
         },
         donor: {
             getDonors: () => Promise<Donor[]>
-            getDonorIdByName: (donorName: string) => Promise<number>;
+            getDonorIdByName: (donorName: string) => Promise<number>
+            addDonor: (donor: object) => Promise<Donor>
         }
     }
 }

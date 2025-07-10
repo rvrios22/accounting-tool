@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Donor } from "../../../types/Donor";
 import { Donation } from "../../../types/Donation";
+import AddDonorModal from "../AddDonorModal/AddDonorModal";
 
 function AddDonationForm() {
   const [donors, setDonors] = useState<Donor[]>([]);
+  const [addDonorModal, setAddDonorModal] = useState<boolean>(false);
   const [donation, setDonation] = useState({
     date: "07/03/2025",
     amount: "200.00",
@@ -22,17 +24,25 @@ function AddDonationForm() {
     e.preventDefault();
 
     try {
-    const newDonation: Donation = {
-      date: donation.date,
-      amount: donation.amount,
-      method: donation.method as "Cash" | "Check" | "Online",
-      DonorId: await window.donor.getDonorIdByName(donation.donor)
-    };
+      const newDonation: Donation = {
+        date: donation.date,
+        amount: donation.amount,
+        method: donation.method as "Cash" | "Check" | "Online",
+        DonorId: await window.donor.getDonorIdByName(donation.donor),
+      };
       const result = await window.donation.addDonation(newDonation);
       console.log(result);
       setDonation({ date: "", amount: "", method: "Cash", donor: "" });
-    } catch (err) {
-      console.error("Failed to add donation", err);
+    } catch (err: any) {
+      if (
+        err &&
+        typeof err.message === "string" &&
+        err.message.includes("Donor not found")
+      ) {
+        setAddDonorModal(true);
+      } else {
+        console.error(err);
+      }
     }
   };
 
@@ -42,6 +52,7 @@ function AddDonationForm() {
       <form method="post" onSubmit={handleSubmit}>
         <label htmlFor="date">Date:</label>
         <input
+          required
           type="date"
           name="date"
           id="date"
@@ -50,6 +61,7 @@ function AddDonationForm() {
         />
         <label htmlFor="amount">Amount:</label>
         <input
+          required
           type="number"
           name="amount"
           id="amount"
@@ -74,6 +86,7 @@ function AddDonationForm() {
         </select>
         <label htmlFor="donor">Donor:</label>
         <input
+          required
           type="text"
           name="donor"
           id="donor"
@@ -94,6 +107,7 @@ function AddDonationForm() {
         </datalist>
         <input type="submit" value="Add Donation" />
       </form>
+      {addDonorModal && <AddDonorModal />}
     </>
   );
 }

@@ -36,6 +36,7 @@ function RouteComponent() {
           <tbody>
             {donations.map(({ id, date, amount, method, DonorId }) => (
               <DonationRow
+                key={id}
                 id={id}
                 date={date}
                 amount={amount}
